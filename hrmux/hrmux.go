@@ -46,6 +46,6 @@ func (hrx *HttpRouterMux) Use(m ...twig.MiddlewareFunc) {
 	hrx.m = append(hrx.m, m...)
 }
 
-func (hrx *HttpRouterMux) Add(method, path string, h HandlerFunc, m ...MiddlewareFunc) *Route {
+func (hrx *HttpRouterMux) Add(method, path string, h twig.HandlerFunc, m ...twig.MiddlewareFunc) *twig.Route {
 	panic("HttpRouterMux is not supports Add func!")
 }
