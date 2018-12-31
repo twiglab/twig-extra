@@ -11,19 +11,19 @@ type Config struct {
 	Store   sessions.Store
 }
 
-const Key = "_gorilla_session_store_"
+const Key = "_session_store_"
 
 var DefaultConfig = Config{
 	Skipper: middleware.DefaultSkipper,
 }
 
-func Middleware(store sessions.Session) twig.MiddlewareFunc {
+func New(store sessions.Store) twig.MiddlewareFunc {
 	c := DefaultConfig
 	c.Store = store
-	return MiddlewareWithConfig(c)
+	return NewWithConfig(c)
 }
 
-func MiddlewareWithConfig(config Config) twig.MiddlewareFunc {
+func NewWithConfig(config Config) twig.MiddlewareFunc {
 	if config.Skipper == nil {
 		config.Skipper = middleware.DefaultSkipper
 	}
@@ -41,4 +41,9 @@ func MiddlewareWithConfig(config Config) twig.MiddlewareFunc {
 			return next(c)
 		}
 	}
+}
+
+func Get(name string, c twig.Ctx) (*sessions.Session, error) {
+	store := c.Get(Key).(sessions.Store)
+	return store.Get(c.Req(), name)
 }
