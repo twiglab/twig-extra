@@ -23,7 +23,7 @@ func (t Prefix) Url(postfix string) string {
 }
 
 func (t Prefix) Mount(mux twig.Register) {
-	twig.Cfg().WithRegister(mux).
+	twig.Cfg(mux).
 		Get(t.Url("/"), TprofIndex).
 		Get(t.Url("/*"), TprofIndex).
 		Get(t.Url("/cmdline"), TprofCmdLine).
