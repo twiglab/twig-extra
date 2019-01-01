@@ -18,12 +18,23 @@ func (t Prefix) String() string {
 	return string(t)
 }
 
-func (t Prefix) Mount(mux twig.Register) {
-	mux.AddHandler(twig.GET, t.String()+"/", TprofIndex)
-	mux.AddHandler(twig.GET, t.String()+"/*", TprofIndex)
+func (t Prefix) Url(postfix string) string {
+	return t.String() + postfix
+}
 
-	mux.AddHandler(twig.GET, t.String()+"/cmdline", TprofCmdLine)
-	mux.AddHandler(twig.GET, t.String()+"/profile", TprofProfile)
-	mux.AddHandler(twig.GET, t.String()+"/symbol", TprofSymbol)
-	mux.AddHandler(twig.GET, t.String()+"/trace", TprofTrace)
+func (t Prefix) Mount(mux twig.Register) {
+	twig.Cfg().WithRegister(mux).
+		Get(t.Url("/"), TprofIndex).
+		Get(t.Url("/*"), TprofIndex).
+		Get(t.Url("/cmdline"), TprofCmdLine).
+		Get(t.Url("/profile"), TprofProfile).
+		Get(t.Url("/symbol"), TprofSymbol).
+		Get(t.Url("/trace"), TprofTrace).
+		Done()
+}
+
+var prof = Prefix("/debug/pprof")
+
+func Mount(r twig.Register) {
+	prof.Mount(r)
 }
