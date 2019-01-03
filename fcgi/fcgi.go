@@ -8,15 +8,16 @@ import (
 	"github.com/twiglab/twig"
 )
 
+// FcgiServant fcgi实现
 type FcgiServnat struct {
 	file string
 	ln   net.Listener
 	twig *twig.Twig
 }
 
-func NewFcgiServant(filename string) *FcgiServnat {
+func NewFcgiServant(file string) *FcgiServnat {
 	return &FcgiServnat{
-		file: filename,
+		file: file,
 	}
 }
 
