@@ -3,16 +3,15 @@ package fcgi
 import (
 	"context"
 	"net"
-	"net/http"
 	"net/http/fcgi"
 
 	"github.com/twiglab/twig"
 )
 
 type FcgiServnat struct {
-	file    string
-	ln      net.Listener
-	handler http.Handler
+	file string
+	ln   net.Listener
+	twig *twig.Twig
 }
 
 func NewFcgiServant(filename string) *FcgiServnat {
@@ -27,7 +26,7 @@ func (s *FcgiServnat) Start() (err error) {
 	}
 
 	go func() {
-		err = fcgi.Serve(s.ln, s.handler)
+		err = fcgi.Serve(s.ln, s.twig)
 	}()
 
 	return
@@ -38,5 +37,5 @@ func (s *FcgiServnat) Shutdown(c context.Context) error {
 }
 
 func (s *FcgiServnat) Attach(t *twig.Twig) {
-	s.handler = t
+	s.twig = t
 }
