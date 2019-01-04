@@ -9,19 +9,19 @@ import (
 )
 
 // FcgiServant fcgi实现
-type FcgiServnat struct {
+type FcgiServant struct {
 	file string
 	ln   net.Listener
 	twig *twig.Twig
 }
 
-func NewFcgiServant(file string) *FcgiServnat {
-	return &FcgiServnat{
+func NewFcgiServant(file string) *FcgiServant {
+	return &FcgiServant{
 		file: file,
 	}
 }
 
-func (s *FcgiServnat) Start() (err error) {
+func (s *FcgiServant) Start() (err error) {
 	if s.ln, err = net.Listen("unix", s.file); err != nil {
 		return
 	}
@@ -33,10 +33,10 @@ func (s *FcgiServnat) Start() (err error) {
 	return
 }
 
-func (s *FcgiServnat) Shutdown(c context.Context) error {
+func (s *FcgiServant) Shutdown(c context.Context) error {
 	return s.ln.Close()
 }
 
-func (s *FcgiServnat) Attach(t *twig.Twig) {
+func (s *FcgiServant) Attach(t *twig.Twig) {
 	s.twig = t
 }
