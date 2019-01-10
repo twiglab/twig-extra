@@ -1,16 +1,17 @@
 package tprof
 
 import (
+	"net/http"
 	"net/http/pprof"
 
 	"github.com/twiglab/twig"
 )
 
-var TprofIndex = twig.WrapHttpHandlerFunc(pprof.Index)
-var TprofCmdLine = twig.WrapHttpHandlerFunc(pprof.Cmdline)
-var TprofProfile = twig.WrapHttpHandlerFunc(pprof.Profile)
-var TprofSymbol = twig.WrapHttpHandlerFunc(pprof.Symbol)
-var TprofTrace = twig.WrapHttpHandlerFunc(pprof.Trace)
+var TprofIndex = twig.WrapHttpHandler(http.HandlerFunc(pprof.Index))
+var TprofCmdLine = twig.WrapHttpHandler(http.HandlerFunc(pprof.Cmdline))
+var TprofProfile = twig.WrapHttpHandler(http.HandlerFunc(pprof.Profile))
+var TprofSymbol = twig.WrapHttpHandler(http.HandlerFunc(pprof.Symbol))
+var TprofTrace = twig.WrapHttpHandler(http.HandlerFunc(pprof.Trace))
 
 type Prefix string
 
