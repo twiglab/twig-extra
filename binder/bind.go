@@ -34,6 +34,10 @@ type BindUnmarshaler interface {
 
 type DefaultBinder struct{}
 
+func New() *DefaultBinder {
+	return &DefaultBinder{}
+}
+
 func (b *DefaultBinder) ID() string {
 	return defBinderID
 }
