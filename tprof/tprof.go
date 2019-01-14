@@ -34,8 +34,8 @@ func (t Prefix) Mount(mux twig.Register) {
 		Done()
 }
 
-var prof = Prefix("/debug/pprof")
+var Tprof = Prefix("/debug/pprof")
 
 func Mount(r twig.Register) {
-	prof.Mount(r)
+	Tprof.Mount(r)
 }
