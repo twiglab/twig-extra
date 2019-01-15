@@ -1,38 +1,43 @@
 package remux
 
 import (
-	"errors"
 	"regexp"
 	"strings"
+
+	"github.com/twiglab/twig"
 )
 
 type UrlRegex struct {
 	Regex *regexp.Regexp
 }
 
-// Method will collect named parameters values.
-// If there are not matches, method will return error.
-func (u *UrlRegex) Match(url string) (map[string]string, error) {
+func (u *UrlRegex) Match(url string) (twig.UrlParams, bool) {
 	params := u.Regex.SubexpNames()
 	matches := u.Regex.FindAllStringSubmatch(url, -1)
 
 	if matches == nil {
-		return nil, errors.New("cannot match " + url)
+		return nil, false
 	}
 
-	result := map[string]string{}
+	result := make(twig.UrlParams)
 	for i, n := range matches[0] {
 		if len(params[i]) > 0 {
 			result[params[i]] = n
 		}
 	}
 
-	return result, nil
+	return result, true
 }
 
-// Converting regex into UrlRegex object
-// Function will build regex with named groups to be able to extract parameters later
-func Pattern(pattern string) UrlRegex {
+type UrlRegexFunc func(string) *UrlRegex
+
+func Full(regex string) *UrlRegex {
+	return &UrlRegex{
+		Regex: regexp.MustCompile(regex),
+	}
+}
+
+func Pattern(pattern string) *UrlRegex {
 	parts := strings.Split(pattern, "/")
 	regex := "^"
 
@@ -70,7 +75,7 @@ func Pattern(pattern string) UrlRegex {
 		regex += "$"
 	}
 
-	return UrlRegex{
+	return &UrlRegex{
 		Regex: regexp.MustCompile(regex),
 	}
 }

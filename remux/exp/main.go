@@ -2,18 +2,18 @@ package main
 
 import (
 	"github.com/twiglab/twig"
-	"mikewang.info/remux"
+	"github.com/twiglab/twig-extra/remux"
 )
 
 func main() {
 	web := twig.TODO()
-	web.WithMuxer(remux.New())
+	web.WithMuxer(remux.New(remux.Pattern))
 
 	twig.Config(web).
-		Get("/a/:name/b/:other/", twig.HelloTwig).
+		Get("/a/:name/b/:other", twig.HelloTwig).
 		Done()
 
 	twig.Start(web)
 
-	twig.Signal(twig.Quit())
+	twig.Signal(twig.Graceful(web, 15))
 }
