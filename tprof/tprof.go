@@ -23,15 +23,14 @@ func (t Prefix) Url(postfix string) string {
 	return t.String() + postfix
 }
 
-func (t Prefix) Mount(mux twig.Register) {
-	twig.Config(mux).
+func (t Prefix) Mount(r twig.Register) {
+	twig.Config(r).
 		Get(t.Url("/"), TprofIndex).
 		Get(t.Url("/*"), TprofIndex).
 		Get(t.Url("/cmdline"), TprofCmdLine).
 		Get(t.Url("/profile"), TprofProfile).
 		Get(t.Url("/symbol"), TprofSymbol).
-		Get(t.Url("/trace"), TprofTrace).
-		Done()
+		Get(t.Url("/trace"), TprofTrace)
 }
 
 var Tprof = Prefix("/debug/pprof")
